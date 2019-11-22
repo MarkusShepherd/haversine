@@ -13,21 +13,17 @@ class Unit(Enum):
     the expression `tuple(Unit)`.
     """
 
-    KILOMETERS = 'km'
-    METERS = 'm'
-    MILES = 'mi'
-    NAUTICAL_MILES = 'nmi'
-    FEET = 'ft'
-    INCHES = 'in'
+    # Unit values taken from http://www.unitconversion.org/unit_converter/length.html
+    KILOMETERS = ('km', 1.0)
+    METERS = ('m', 1000.0)
+    MILES = ('mi', 0.621371192)
+    NAUTICAL_MILES = ('nmi', 0.539956803)
+    FEET = ('ft', 3280.839895013)
+    INCHES = ('in', 39370.078740158)
 
-
-# Unit values taken from http://www.unitconversion.org/unit_converter/length.html
-_CONVERSIONS = {Unit.KILOMETERS:       1.0,
-                Unit.METERS:           1000.0,
-                Unit.MILES:            0.621371192,
-                Unit.NAUTICAL_MILES:   0.539956803,
-                Unit.FEET:             3280.839895013,
-                Unit.INCHES:           39370.078740158}
+    def __init__(self, symbol, conversion):
+        self.symbol = symbol
+        self.conversion = conversion
 
 
 def haversine(point1, point2, unit=Unit.KILOMETERS):
@@ -56,7 +52,7 @@ def haversine(point1, point2, unit=Unit.KILOMETERS):
 
     # get earth radius in required units
     unit = Unit(unit)
-    avg_earth_radius = _AVG_EARTH_RADIUS_KM * _CONVERSIONS[unit]
+    avg_earth_radius = _AVG_EARTH_RADIUS_KM * unit.conversion
 
     # unpack latitude/longitude
     lat1, lng1 = point1
